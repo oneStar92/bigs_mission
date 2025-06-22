@@ -1,9 +1,9 @@
 part of '../entity.dart';
 
 @Freezed(fromJson: false, toJson: false)
-abstract class Token with _$Token {
-  const factory Token({
+abstract class TokenEntity with _$TokenEntity {
+  const factory TokenEntity({
     required String accessToken,
     required String refreshToken,
-  }) = _Token;
+  }) = _TokenEntity;
 }

@@ -1,24 +1,24 @@
 part of '../entity.dart';
 
 @Freezed(fromJson: false, toJson: false)
-abstract class BoardItem with _$BoardItem {
-  const factory BoardItem({
+abstract class BoardItemEntity with _$BoardItemEntity {
+  const factory BoardItemEntity({
     required int id,
     required String title,
     required String category,
     required String createdAt,
-  }) = _BoardItem;
+  }) = _BoardItemEntity;
 }
 
 @Freezed(fromJson: false, toJson: false)
-abstract class BoardPage with _$BoardPage {
-  const factory BoardPage({
-    required List<BoardItem> boards,
+abstract class BoardsPageEntity with _$BoardsPageEntity {
+  const factory BoardsPageEntity({
+    required List<BoardItemEntity> boards,
     required bool hasNext,
     required int number,
     required bool isEmpty,
-  }) = _BoardPage;
+  }) = _BoardsPageEntity;
 
-  factory BoardPage.firstPage() =>
-      _BoardPage(boards: List.empty(growable: true), hasNext: true, number: 0, isEmpty: false);
+  factory BoardsPageEntity.firstPage() =>
+      _BoardsPageEntity(boards: List.empty(growable: true), hasNext: true, number: 0, isEmpty: false);
 }
