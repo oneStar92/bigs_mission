@@ -7,7 +7,12 @@ abstract class BoardRepository {
 
   Future<void> createBoard({required String title, required String content, required String category});
 
-  Future<void> updateBoard({required BoardEntity board});
+  Future<BoardEntity> updateBoard({
+    required BoardEntity board,
+    required String title,
+    required String content,
+    required String category,
+  });
 
   Future<void> deleteBoard({required int id});
 }
