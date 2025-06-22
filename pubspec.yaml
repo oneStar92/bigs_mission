@@ -11,12 +11,17 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
+  #network
   dio: ^5.8.0+1
   retrofit: ^4.4.2
+  #model
   freezed_annotation: ^3.0.0
   json_annotation: ^4.9.0
-  riverpod: ^2.6.1
+  #riverpod
   riverpod_annotation: ^2.6.1
+  flutter_riverpod: ^2.6.1
+  hooks_riverpod: ^2.6.1
+  flutter_hooks: ^0.21.2
 
 dev_dependencies:
   flutter_test:
@@ -28,6 +33,8 @@ dev_dependencies:
   json_serializable: ^6.9.5
   retrofit_generator: ^9.2.0
   riverpod_generator: ^2.6.5
+  custom_lint: ^0.7.5
+  riverpod_lint: ^2.6.5
 
 flutter:
 
