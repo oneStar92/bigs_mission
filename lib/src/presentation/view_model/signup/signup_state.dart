@@ -8,5 +8,9 @@ abstract class SignupState with _$SignupState {
     @Default('') String nickname,
     @Default('') String password,
     @Default('') String confirmPassword,
+    @Default(false) bool validateId,
+    @Default(false) bool validateNickname,
+    @Default(false) bool validatePassword,
+    @Default(false) bool validateConfirmPassword,
   }) = _SignupState;
 }

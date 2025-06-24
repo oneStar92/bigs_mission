@@ -1,13 +1,13 @@
 part of '../view_model.dart';
 
-@riverpod
+@Riverpod(keepAlive: false)
 class SignupViewModel extends _$SignupViewModel {
   @override
-  FutureOr<SignupState> build({required int id}) async {
+  FutureOr<SignupState> build() async {
     return SignupState();
   }
 
-  changeId(String id) {
+  onChangeId(String id) {
     final value = state.valueOrNull;
 
     if (value != null) {
@@ -15,7 +15,7 @@ class SignupViewModel extends _$SignupViewModel {
     }
   }
 
-  changeNickname(String nickname) {
+  onChangeNickname(String nickname) {
     final value = state.valueOrNull;
 
     if (value != null) {
@@ -23,7 +23,7 @@ class SignupViewModel extends _$SignupViewModel {
     }
   }
 
-  changePassword(String password) {
+  onChangePassword(String password) {
     final value = state.valueOrNull;
 
     if (value != null) {
@@ -31,11 +31,54 @@ class SignupViewModel extends _$SignupViewModel {
     }
   }
 
-  changeConfirmPassword(String confirmPassword) {
+  onChangeConfirmPassword(String confirmPassword) {
     final value = state.valueOrNull;
 
     if (value != null) {
       state = AsyncValue.data(value.copyWith(confirmPassword: confirmPassword));
+    }
+  }
+
+  onFocusId() {
+    final value = state.valueOrNull;
+
+    if (value != null) {
+      state = AsyncValue.data(value.copyWith(validateId: true));
+    }
+  }
+
+  onFocusNickname() {
+    final value = state.valueOrNull;
+
+    if (value != null) {
+      state = AsyncValue.data(value.copyWith(validateNickname: true));
+    }
+  }
+
+  onFocusPassword() {
+    final value = state.valueOrNull;
+
+    if (value != null) {
+      state = AsyncValue.data(value.copyWith(validatePassword: true));
+    }
+  }
+
+  onFocusConfirmPassword() {
+    final value = state.valueOrNull;
+
+    if (value != null) {
+      state = AsyncValue.data(value.copyWith(validateConfirmPassword: true));
+    }
+  }
+
+  // 회원가입 버튼 누를 때 전체 ON
+  validateAll() {
+    final value = state.valueOrNull;
+
+    if (value != null) {
+      state = AsyncValue.data(
+        value.copyWith(validateId: true, validateNickname: true, validatePassword: true, validateConfirmPassword: true),
+      );
     }
   }
 
@@ -46,17 +89,17 @@ class SignupViewModel extends _$SignupViewModel {
       state = AsyncValue.data(value.copyWith(isLoading: true));
 
       state = await AsyncValue.guard(() async {
-        await ref.watch(
-          signupProvider
-              .call(
-                id: value.id,
-                nickname: value.nickname,
-                password: value.password,
-                confirmPassword: value.confirmPassword,
-              )
-              .future,
-        );
-
+        // await ref.watch(
+        //   signupProvider
+        //       .call(
+        //         id: value.id,
+        //         nickname: value.nickname,
+        //         password: value.password,
+        //         confirmPassword: value.confirmPassword,
+        //       )
+        //       .future,
+        // );
+        await Future.delayed(Duration(seconds: 3));
         return value.copyWith(isLoading: false);
       });
     }

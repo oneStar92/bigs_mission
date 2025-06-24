@@ -2,6 +2,7 @@ import 'package:bigs/src/domain/entity/entity.dart';
 import 'package:bigs/src/domain/usecase/usecase.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 part 'view_model.g.dart';
 part 'view_model.freezed.dart';
@@ -15,6 +16,7 @@ part 'home/home_view_model.dart';
 part 'login/login_state.dart';
 part 'login/login_view_model.dart';
 part 'signup/signup_state.dart';
+part 'signup/signup_validator.dart';
 part 'signup/signup_view_model.dart';
 part 'update/update_state.dart';
 part 'update/update_view_model.dart';
