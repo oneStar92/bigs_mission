@@ -11,11 +11,7 @@ class CustomBackButton extends StatelessWidget {
       onTap: () {
         onTap.call();
       },
-      child: SizedBox(
-        height: 24,
-        width: 24,
-        child: FittedBox(child: Icon(CupertinoIcons.back)),
-      ),
+      child: SizedBox(height: 24, width: 24, child: FittedBox(child: Icon(CupertinoIcons.back))),
     );
   }
 }

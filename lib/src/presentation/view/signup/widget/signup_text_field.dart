@@ -114,7 +114,7 @@ class SignupTextField extends StatelessWidget {
        _hintText = hintText,
        _hintStyle = hintStyle,
        _textStyle = textStyle,
-  _isError = isError,
+       _isError = isError,
        _errorText = errorText,
        _obscureText = obscureText;
 }

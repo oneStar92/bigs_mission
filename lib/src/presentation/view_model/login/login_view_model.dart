@@ -3,7 +3,7 @@ part of '../view_model.dart';
 @riverpod
 class LoginViewModel extends _$LoginViewModel {
   @override
-  FutureOr<LoginState> build({required int id}) async {
+  FutureOr<LoginState> build() async {
     return LoginState();
   }
 
