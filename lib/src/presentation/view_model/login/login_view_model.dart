@@ -7,7 +7,7 @@ class LoginViewModel extends _$LoginViewModel {
     return LoginState();
   }
 
-  changeId(String id) {
+  onChangeId(String id) {
     final value = state.valueOrNull;
 
     if (value != null) {
@@ -15,7 +15,7 @@ class LoginViewModel extends _$LoginViewModel {
     }
   }
 
-  changePassword(String password) {
+  onChangePassword(String password) {
     final value = state.valueOrNull;
 
     if (value != null) {
@@ -35,5 +35,9 @@ class LoginViewModel extends _$LoginViewModel {
         return value.copyWith(isLoading: false);
       });
     }
+  }
+
+  Future<void> reset() async {
+    state = AsyncValue.data(LoginState());
   }
 }
