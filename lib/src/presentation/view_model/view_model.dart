@@ -1,3 +1,4 @@
+import 'package:bigs/src/core/core.dart';
 import 'package:bigs/src/domain/entity/entity.dart';
 import 'package:bigs/src/domain/usecase/usecase.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';

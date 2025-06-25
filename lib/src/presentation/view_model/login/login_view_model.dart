@@ -30,7 +30,9 @@ class LoginViewModel extends _$LoginViewModel {
       state = AsyncValue.data(value.copyWith(isLoading: true));
 
       try {
-        await ref.watch(loginProvider.call(id: value.id, password: value.password).future);
+        final tokenEntity = await ref.watch(loginProvider.call(id: value.id, password: value.password).future);
+        print(tokenEntity);
+        await TokenStorage.instance.saveToken(tokenEntity);
       } catch (e) {
         throw LoginFailedException();
       } finally {
