@@ -8,7 +8,14 @@ final router = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       return null;
     },
-    routes: [],
+    routes: [
+      GoRoute(
+        path: loginPath,
+        name: loginName,
+        builder: (context, state) => LoginScreen(),
+        routes: [GoRoute(path: signupPath, name: signupName, builder: (context, state) => SignupScreen())],
+      ),
+    ],
   );
 
   return router;
