@@ -10,6 +10,7 @@ part 'detail/detail_state.dart';
 part 'detail/detail_view_model.dart';
 part 'home/home_state.dart';
 part 'home/home_view_model.dart';
+part 'login/login_exception.dart';
 part 'login/login_state.dart';
 part 'login/login_view_model.dart';
 part 'signup/signup_state.dart';

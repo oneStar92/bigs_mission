@@ -143,7 +143,7 @@ final class _SignupScreenState extends ConsumerState<SignupScreen> {
                       }
                     },
                     onComplete: (_) {
-                      context.pop();
+                      context.pop('회원가입을 완료했어요.');
                     },
                     child: Text(
                       '가입하기',

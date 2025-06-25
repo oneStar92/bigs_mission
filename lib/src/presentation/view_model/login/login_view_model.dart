@@ -29,11 +29,13 @@ class LoginViewModel extends _$LoginViewModel {
     if (value != null && !value.isLoading) {
       state = AsyncValue.data(value.copyWith(isLoading: true));
 
-      state = await AsyncValue.guard(() async {
+      try {
         await ref.watch(loginProvider.call(id: value.id, password: value.password).future);
-
-        return value.copyWith(isLoading: false);
-      });
+      } catch (e) {
+        throw LoginFailedException();
+      } finally {
+        state = AsyncValue.data(value.copyWith(isLoading: false));
+      }
     }
   }
 

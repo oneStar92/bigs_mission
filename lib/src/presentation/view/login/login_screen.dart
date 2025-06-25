@@ -1,11 +1,13 @@
 import 'package:bigs/src/core/core.dart';
 import 'package:bigs/src/presentation/view/common/text_style/text_style.dart';
+import 'package:bigs/src/presentation/view/common/widget/future_button.dart';
 import 'package:bigs/src/presentation/view/common/widget/loading_barrier.dart';
-import 'package:bigs/src/presentation/view/login/widget/login_button.dart';
 import 'package:bigs/src/presentation/view/login/widget/login_text_field.dart';
 import 'package:bigs/src/presentation/view_model/view_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -45,31 +47,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(loginViewModelProvider, (prev, next) {
-      if (next.hasError) {
-        final msg = next.error.toString();
-
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!mounted) return;
-          showDialog(
-            context: context,
-            builder: (_) => AlertDialog(
-              content: Text(msg),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    ref.read(loginViewModelProvider.notifier).reset();
-                  },
-                  child: const Text("확인"),
-                )
-              ],
-            ),
-          );
-        });
-      }
-    });
-
     final isLoading = ref.watch(
       loginViewModelProvider.select((asyncValue) => asyncValue.valueOrNull?.isLoading ?? false),
     );
@@ -135,15 +112,41 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       },
                     ),
                   ),
-                  LoginButton(
-                    onTap: () {
-                      ref.read(loginViewModelProvider.notifier).login();
+                  FutureButton<void, LoginException>(
+                    onTap: () => ref.read(loginViewModelProvider.notifier).login(),
+                    onError: (e) {
+                      showCupertinoDialog(
+                        context: context,
+                        builder:
+                            (_) => CupertinoAlertDialog(
+                              content: Text(e.message, style: TextStyle(fontSize: 15)),
+                              actions: [
+                                CupertinoDialogAction(
+                                  isDefaultAction: true,
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    ref.read(loginViewModelProvider.notifier).reset();
+                                  },
+                                  child: Text('확인', style: smallTextStyle.copyWith(color: CupertinoColors.black)),
+                                ),
+                              ],
+                            ),
+                      );
                     },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                      decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(8)),
+                      child: Center(child: Text('로그인', style: smallTextStyle.copyWith(color: Colors.white))),
+                    ),
                   ),
                   Center(
                     child: GestureDetector(
-                      onTap: () {
-                        context.pushNamed(signupName);
+                      onTap: () async {
+                        final message = await context.pushNamed<String>(signupName);
+
+                        if (message != null) {
+                          Fluttertoast.showToast(msg: message);
+                        }
                       },
                       child: Text(
                         '회원가입',
