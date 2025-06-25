@@ -1,11 +1,14 @@
+import 'package:bigs/src/presentation/view/common/extension/show_cupertino_alert.dart';
 import 'package:bigs/src/presentation/view/common/text_style/text_style.dart';
 import 'package:bigs/src/presentation/view/common/widget/back_button.dart';
 import 'package:bigs/src/presentation/view/common/widget/loading_barrier.dart';
+import 'package:bigs/src/presentation/view/common/widget/future_button.dart';
 import 'package:bigs/src/presentation/view/signup/widget/signup_text_field.dart';
 import 'package:bigs/src/presentation/view_model/view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 final class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
@@ -89,7 +92,7 @@ final class _SignupScreenState extends ConsumerState<SignupScreen> {
     );
     return Stack(
       children: [
-        Scaffold(appBar: _buildAppBar(context), body: _buildBody(context)),
+        Scaffold(appBar: _buildAppBar(context), body: SafeArea(child: _buildBody(context))),
         if (isLoading) Positioned.fill(child: LoadingBarrier()),
       ],
     );
@@ -106,7 +109,14 @@ final class _SignupScreenState extends ConsumerState<SignupScreen> {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Positioned(left: 0, child: CustomBackButton(onTap: () {})),
+            Positioned(
+              left: 0,
+              child: CustomBackButton(
+                onTap: () {
+                  context.pop();
+                },
+              ),
+            ),
             const Center(child: Text('회원가입')),
             Positioned(
               right: 0,
@@ -114,13 +124,26 @@ final class _SignupScreenState extends ConsumerState<SignupScreen> {
                 builder: (context, ref, child) {
                   final isEnabled = ref.watch(isSignupFormValidProvider);
 
-                  return GestureDetector(
+                  return FutureButton<void, SignupException>(
                     onTap: () {
                       if (isEnabled) {
-                        ref.read(signupViewModelProvider.notifier).signup();
+                        return ref.read(signupViewModelProvider.notifier).signup();
                       } else {
                         ref.read(signupViewModelProvider.notifier).validateAll();
+                        throw SignupMissingFieldException();
                       }
+                    },
+                    onError: (e) {
+                      switch (e) {
+                        case SignupFailedException():
+                          context.showCupertinoAlert(message: e.message, title: '회원가입 실패');
+                          break;
+                        case SignupMissingFieldException():
+                          break;
+                      }
+                    },
+                    onComplete: (_) {
+                      context.pop();
                     },
                     child: Text(
                       '가입하기',
@@ -152,16 +175,13 @@ final class _SignupScreenState extends ConsumerState<SignupScreen> {
               return SignupTextField(
                 focusNode: _idFocusNode,
                 textEditingController: _idTextController,
-                textInputType: TextInputType.emailAddress,
-                hintText: '아이디(이메일)를 입력해주세요.',
-                hintStyle: xSmallTextStyle.copyWith(color: CupertinoColors.inactiveGray),
-                textStyle: xSmallTextStyle,
+                type: SignupTextFieldType.id,
                 isError: errorText != null,
                 errorText: ref.watch(idErrorProvider),
               );
             },
           ),
-          Text('닉네임'),
+          Text('이름'),
           const SizedBox(height: 8),
           Consumer(
             builder: (context, ref, child) {
@@ -169,10 +189,7 @@ final class _SignupScreenState extends ConsumerState<SignupScreen> {
               return SignupTextField(
                 focusNode: _nicknameFocusNode,
                 textEditingController: _nicknameTextController,
-                textInputType: TextInputType.emailAddress,
-                hintText: '닉네임을 입력해주세요.',
-                hintStyle: xSmallTextStyle.copyWith(color: CupertinoColors.inactiveGray),
-                textStyle: xSmallTextStyle,
+                type: SignupTextFieldType.name,
                 isError: errorText != null,
                 errorText: ref.watch(nicknameErrorProvider),
               );
@@ -186,11 +203,7 @@ final class _SignupScreenState extends ConsumerState<SignupScreen> {
               return SignupTextField(
                 focusNode: _passwordFocusNode,
                 textEditingController: _passwordTextController,
-                textInputType: TextInputType.text,
-                hintText: '비밀번호를 입력해주세요.',
-                hintStyle: xSmallTextStyle.copyWith(color: CupertinoColors.inactiveGray),
-                textStyle: xSmallTextStyle,
-                obscureText: true,
+                type: SignupTextFieldType.password,
                 isError: errorText != null,
                 errorText: errorText,
               );
@@ -204,11 +217,7 @@ final class _SignupScreenState extends ConsumerState<SignupScreen> {
               return SignupTextField(
                 focusNode: _confirmPasswordFocusNode,
                 textEditingController: _confirmPasswordTextController,
-                textInputType: TextInputType.text,
-                hintText: '비밀번호를 다시 입력해주세요.',
-                hintStyle: xSmallTextStyle.copyWith(color: CupertinoColors.inactiveGray),
-                textStyle: xSmallTextStyle,
-                obscureText: true,
+                type: SignupTextFieldType.confirmPassword,
                 isError: errorText != null,
                 errorText: errorText,
               );

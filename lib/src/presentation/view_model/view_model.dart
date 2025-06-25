@@ -15,6 +15,7 @@ part 'login/login_view_model.dart';
 part 'signup/signup_state.dart';
 part 'signup/signup_validator.dart';
 part 'signup/signup_view_model.dart';
+part 'signup/signup_exception.dart';
 part 'update/update_state.dart';
 part 'update/update_view_model.dart';
 part 'view_model.freezed.dart';

@@ -1,18 +1,15 @@
+import 'package:bigs/src/presentation/view/common/text_style/text_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
+part 'signup_text_field_type.dart';
 
 class SignupTextField extends StatelessWidget {
   final FocusNode _focusNode;
   final TextEditingController _textEditingController;
-  final TextInputType _textInputType;
-  final List<TextInputFormatter> _inputFormatters;
-  final String _hintText;
-  final TextStyle _hintStyle;
-  final TextStyle _textStyle;
+  final SignupTextFieldType _type;
   final bool _isError;
   final String? _errorText;
-  final bool _obscureText;
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +18,10 @@ class SignupTextField extends StatelessWidget {
         TextFormField(
           focusNode: _focusNode,
           controller: _textEditingController,
-          keyboardType: _textInputType,
-          inputFormatters: _inputFormatters,
+          keyboardType: _type.textInputType,
           decoration: InputDecoration(
-            hintText: _hintText,
-            hintStyle: _hintStyle,
+            hintText: _type.hintText,
+            hintStyle: xSmallTextStyle.copyWith(color: CupertinoColors.inactiveGray),
             errorText: null,
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
@@ -60,14 +56,14 @@ class SignupTextField extends StatelessWidget {
                 valueListenable: _textEditingController,
                 builder:
                     (context, value, child) =>
-                        value.text.isNotEmpty ? Icon(CupertinoIcons.xmark_circle_fill) : SizedBox.shrink(),
+                        value.text.isNotEmpty ? Icon(CupertinoIcons.xmark_circle_fill, size: 18) : SizedBox.shrink(),
               ),
             ),
             suffixIconConstraints: const BoxConstraints(maxWidth: 28, minWidth: 28),
           ),
           validator: null,
-          obscureText: _obscureText,
-          style: _textStyle,
+          obscureText: _type.obscureText,
+          style: xSmallTextStyle,
           cursorColor: Colors.black,
           cursorErrorColor: Colors.black,
           cursorHeight: 16,
@@ -99,22 +95,12 @@ class SignupTextField extends StatelessWidget {
     super.key,
     required FocusNode focusNode,
     required TextEditingController textEditingController,
-    required TextInputType textInputType,
-    List<TextInputFormatter> inputFormatters = const [],
-    required String hintText,
-    required TextStyle hintStyle,
-    required TextStyle textStyle,
-    required String? errorText,
+    required SignupTextFieldType type,
     bool isError = false,
-    bool obscureText = false,
+    required String? errorText,
   }) : _focusNode = focusNode,
        _textEditingController = textEditingController,
-       _textInputType = textInputType,
-       _inputFormatters = inputFormatters,
-       _hintText = hintText,
-       _hintStyle = hintStyle,
-       _textStyle = textStyle,
+       _type = type,
        _isError = isError,
-       _errorText = errorText,
-       _obscureText = obscureText;
+       _errorText = errorText;
 }

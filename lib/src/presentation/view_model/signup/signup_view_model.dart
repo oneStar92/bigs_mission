@@ -88,20 +88,22 @@ class SignupViewModel extends _$SignupViewModel {
     if (value != null && !value.isLoading) {
       state = AsyncValue.data(value.copyWith(isLoading: true));
 
-      state = await AsyncValue.guard(() async {
-        // await ref.watch(
-        //   signupProvider
-        //       .call(
-        //         id: value.id,
-        //         nickname: value.nickname,
-        //         password: value.password,
-        //         confirmPassword: value.confirmPassword,
-        //       )
-        //       .future,
-        // );
-        await Future.delayed(Duration(seconds: 3));
-        return value.copyWith(isLoading: false);
-      });
+      try {
+        await ref.watch(
+          signupProvider
+              .call(
+                id: value.id,
+                nickname: value.nickname,
+                password: value.password,
+                confirmPassword: value.confirmPassword,
+              )
+              .future,
+        );
+      } catch (e) {
+        throw SignupFailedException();
+      } finally {
+        state = AsyncValue.data(value.copyWith(isLoading: false));
+      }
     }
   }
 }
