@@ -19,9 +19,19 @@ Future<BoardEntity> fetchBoardDetail(Ref ref, {required int id}) async {
 }
 
 @riverpod
-Future<void> createBoard(Ref ref, {required String title, required String content, required String category}) async {
-  final repository = ref.watch(boardRepositoryProvider);
-  return await repository.createBoard(title: title, content: content, category: category);
+Future<BoardItemEntity> createBoard(
+  Ref ref, {
+  required String title,
+  required String content,
+  required Category category,
+}) async {
+  try {
+    final repository = ref.watch(boardRepositoryProvider);
+    final id = await repository.createBoard(title: title, content: content, category: category);
+    return BoardItemEntity(id: id, title: title, category: category, createdAt: DateTime.now().toIso8601String());
+  } catch (e) {
+    rethrow;
+  }
 }
 
 @riverpod
@@ -30,7 +40,7 @@ Future<BoardEntity> updateBoard(
   required BoardEntity board,
   required String title,
   required String content,
-  required String category,
+  required Category category,
 }) async {
   final repository = ref.watch(boardRepositoryProvider);
   return await repository.updateBoard(board: board, title: title, content: content, category: category);

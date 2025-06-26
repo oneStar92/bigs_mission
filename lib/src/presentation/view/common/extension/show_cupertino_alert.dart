@@ -11,19 +11,20 @@ extension CupertinoAlertExtension on BuildContext {
     showCupertinoDialog(
       context: this,
       barrierDismissible: true,
-      builder: (_) => CupertinoAlertDialog(
-        title: Text(title, style: mediumTextStyle,),
-        content: Text(message, style: smallTextStyle,),
-        actions: [
-          CupertinoDialogAction(
-            child: Text(buttonText, style: xSmallTextStyle.copyWith(color: CupertinoColors.black),),
-            onPressed: () {
-              Navigator.of(this, rootNavigator: true).pop();
-              onPressed?.call();
-            },
+      builder:
+          (_) => CupertinoAlertDialog(
+            title: Text(title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+            content: Text(message, style: smallTextStyle),
+            actions: [
+              CupertinoDialogAction(
+                child: Text(buttonText, style: xSmallTextStyle.copyWith(color: CupertinoColors.black)),
+                onPressed: () {
+                  Navigator.of(this, rootNavigator: true).pop();
+                  onPressed?.call();
+                },
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 }

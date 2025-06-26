@@ -3,16 +3,11 @@ part of '../view_model.dart';
 @riverpod
 class CreateViewModel extends _$CreateViewModel {
   @override
-  FutureOr<CreateState> build({required int id}) {
+  FutureOr<CreateState> build() {
     return CreateState();
   }
 
-  bool get canCreate =>
-      (state.valueOrNull?.title.isNotEmpty ?? false) &&
-      (state.valueOrNull?.content.isNotEmpty ?? false) &&
-      (state.valueOrNull?.category.isNotEmpty ?? false);
-
-  changeTitle(String title) {
+  onChangeTitle(String title) {
     final value = state.valueOrNull;
 
     if (value != null) {
@@ -20,7 +15,7 @@ class CreateViewModel extends _$CreateViewModel {
     }
   }
 
-  changeContent(String content) {
+  onChangeContent(String content) {
     final value = state.valueOrNull;
 
     if (value != null) {
@@ -28,11 +23,35 @@ class CreateViewModel extends _$CreateViewModel {
     }
   }
 
-  changeCategory(String category) {
+  onChangeCategory(Category? category) {
     final value = state.valueOrNull;
 
     if (value != null) {
       state = AsyncValue.data(value.copyWith(category: category));
+    }
+  }
+
+  onFocusTitle() {
+    final value = state.valueOrNull;
+
+    if (value != null) {
+      state = AsyncValue.data(value.copyWith(validateTitle: true));
+    }
+  }
+
+  onFocusContent() {
+    final value = state.valueOrNull;
+
+    if (value != null) {
+      state = AsyncValue.data(value.copyWith(validateContent: true));
+    }
+  }
+
+  validateAll() {
+    final value = state.valueOrNull;
+
+    if (value != null) {
+      state = AsyncValue.data(value.copyWith(validateTitle: true, validateContent: true, validateCategory: true));
     }
   }
 
@@ -42,13 +61,20 @@ class CreateViewModel extends _$CreateViewModel {
     if (value != null && !value.isLoading) {
       state = AsyncValue.data(value.copyWith(isLoading: true));
 
-      state = await AsyncValue.guard(() async {
-        await ref.watch(
-          createBoardProvider.call(title: value.title, content: value.content, category: value.category).future,
+      try {
+        final newBoard = await ref.watch(
+          createBoardProvider(
+            title: value.title,
+            content: value.content,
+            category: value.category ?? Category.etc,
+          ).future,
         );
-
-        return value.copyWith(isLoading: false);
-      });
+        ref.read(homeViewModelProvider.notifier).create(newBoard);
+      } catch (e) {
+        throw CreateFailedException();
+      } finally {
+        state = AsyncValue.data(value.copyWith(isLoading: false));
+      }
     }
   }
 }

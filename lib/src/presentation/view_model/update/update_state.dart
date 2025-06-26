@@ -7,6 +7,6 @@ abstract class UpdateState with _$UpdateState {
     required BoardEntity previous,
     @Default('') String title,
     @Default('') String content,
-    @Default('') String category,
+    @Default(null) Category? category,
   }) = _UpdateState;
 }

@@ -36,6 +36,5 @@ class AuthDataSourceImpl implements AuthDataSource {
 
 @riverpod
 AuthDataSource authDataSource(Ref ref) {
-  final http = ref.watch(httpProvider);
-  return AuthDataSourceImpl(service: AuthService(http));
+  return AuthDataSourceImpl(service: AuthService(DioClient.instance.dio));
 }

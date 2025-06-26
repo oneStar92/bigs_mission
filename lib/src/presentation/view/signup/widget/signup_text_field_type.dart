@@ -1,6 +1,11 @@
 part of 'signup_text_field.dart';
 
-enum SignupTextFieldType { id, name, password, confirmPassword;
+enum SignupTextFieldType {
+  id,
+  name,
+  password,
+  confirmPassword;
+
   String get hintText {
     switch (this) {
       case SignupTextFieldType.id:

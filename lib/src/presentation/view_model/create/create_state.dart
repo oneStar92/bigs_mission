@@ -6,6 +6,9 @@ abstract class CreateState with _$CreateState {
     @Default(false) bool isLoading,
     @Default('') String title,
     @Default('') String content,
-    @Default('') String category,
+    @Default(null) Category? category,
+    @Default(false) bool validateTitle,
+    @Default(false) bool validateContent,
+    @Default(false) bool validateCategory,
   }) = _CreateState;
 }

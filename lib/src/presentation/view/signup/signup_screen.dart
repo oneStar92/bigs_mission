@@ -1,8 +1,8 @@
 import 'package:bigs/src/presentation/view/common/extension/show_cupertino_alert.dart';
 import 'package:bigs/src/presentation/view/common/text_style/text_style.dart';
 import 'package:bigs/src/presentation/view/common/widget/back_button.dart';
-import 'package:bigs/src/presentation/view/common/widget/loading_barrier.dart';
 import 'package:bigs/src/presentation/view/common/widget/future_button.dart';
+import 'package:bigs/src/presentation/view/common/widget/loading_barrier.dart';
 import 'package:bigs/src/presentation/view/signup/widget/signup_text_field.dart';
 import 'package:bigs/src/presentation/view_model/view_model.dart';
 import 'package:flutter/cupertino.dart';

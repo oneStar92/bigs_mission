@@ -5,7 +5,7 @@ abstract class BoardItemEntity with _$BoardItemEntity {
   const factory BoardItemEntity({
     required int id,
     required String title,
-    required String category,
+    required Category category,
     required String createdAt,
   }) = _BoardItemEntity;
 }

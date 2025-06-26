@@ -6,7 +6,7 @@ final class BoardRepositoryImpl implements BoardRepository {
   final BoardDataSource _source;
 
   @override
-  Future<void> createBoard({required String title, required String content, required String category}) =>
+  Future<int> createBoard({required String title, required String content, required Category category}) =>
       _source.createBoard(title: title, content: content, category: category);
 
   @override
@@ -29,7 +29,7 @@ final class BoardRepositoryImpl implements BoardRepository {
     required BoardEntity board,
     required String title,
     required String content,
-    required String category,
+    required Category category,
   }) async {
     await _source.updateBoard(id: board.id, title: title, content: content, category: category);
     return board.copyWith(title: title, content: content, category: category);

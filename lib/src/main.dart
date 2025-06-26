@@ -6,6 +6,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await TokenStorage.instance.load();
+  DioClient.instance.initial();
 
   runApp(const ProviderScope(child: MyApp()));
 }
@@ -18,7 +19,11 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Bigs Front Mission App',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: AppBarTheme(backgroundColor: Colors.white),
+      ),
       routerConfig: makeGoRouter(hasToken: TokenStorage.instance.hasToken),
     );
   }

@@ -78,7 +78,7 @@ final class BoardsPageDTO {
   @JsonKey()
   final int number;
   @JsonKey()
-  final bool sort;
+  final SortDTO sort;
   @JsonKey()
   final bool first;
   @JsonKey()

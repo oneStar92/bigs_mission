@@ -5,9 +5,14 @@ abstract class BoardDataSource {
 
   Future<BoardDTO> fetchBoardDetail({required int id});
 
-  Future<void> createBoard({required String title, required String content, required String category});
+  Future<int> createBoard({required String title, required String content, required Category category});
 
-  Future<void> updateBoard({required int id, required String title, required String content, required String category});
+  Future<void> updateBoard({
+    required int id,
+    required String title,
+    required String content,
+    required Category category,
+  });
 
   Future<void> deleteBoard({required int id});
 }
@@ -18,8 +23,9 @@ class BoardDataSourceImpl implements BoardDataSource {
   final BoardService _service;
 
   @override
-  Future<void> createBoard({required String title, required String content, required String category}) =>
-      _service.createBoard(body: {'title': title, 'content': content, 'category': category});
+  Future<int> createBoard({required String title, required String content, required Category category}) {
+    return _service.createBoard(requestJson: {'title': title, 'content': content, 'category': category.toJson()});
+  }
 
   @override
   Future<void> deleteBoard({required int id}) => _service.deleteBoard(id: id);
@@ -36,12 +42,11 @@ class BoardDataSourceImpl implements BoardDataSource {
     required int id,
     required String title,
     required String content,
-    required String category,
-  }) => _service.updateBoard(id: id, body: {'title': title, 'content': content, 'category': category});
+    required Category category,
+  }) => _service.updateBoard(id: id, requestJson: {'title': title, 'content': content, 'category': category.toJson()});
 }
 
 @riverpod
 BoardDataSource boardDataSource(Ref ref) {
-  final http = ref.watch(httpProvider);
-  return BoardDataSourceImpl(service: BoardService(http));
+  return BoardDataSourceImpl(service: BoardServiceImpl());
 }

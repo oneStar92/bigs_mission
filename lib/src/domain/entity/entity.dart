@@ -1,3 +1,4 @@
+import 'package:bigs/src/domain/entity/category/category.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'board/board.dart';

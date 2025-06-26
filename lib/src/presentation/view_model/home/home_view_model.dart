@@ -9,6 +9,7 @@ class HomeViewModel extends _$HomeViewModel {
 
   Future<HomeState> _fetchData() async {
     final boardsPage = await ref.watch(fetchInitialPageProvider.future);
+
     return HomeState(
       isLoading: false,
       boards: List.from(boardsPage.boards),
@@ -36,5 +37,58 @@ class HomeViewModel extends _$HomeViewModel {
         );
       });
     }
+  }
+
+  Future<void> refresh() async {
+    state = AsyncValue.data(
+      HomeState(
+        isLoading: true,
+        boards: List.empty(growable: true),
+        currentPageNumber: 0,
+        hasNext: true,
+        isEmpty: false,
+      ),
+    );
+
+    final boardsPage = await ref.watch(fetchInitialPageProvider.future);
+
+    state = AsyncValue.data(
+      HomeState(
+        isLoading: false,
+        boards: List.from(boardsPage.boards),
+        currentPageNumber: 0,
+        hasNext: boardsPage.hasNext,
+        isEmpty: boardsPage.isEmpty,
+      ),
+    );
+  }
+
+  void updateBoard(int id, String title, String content, Category category) {
+    final current = state.valueOrNull;
+    if (current == null) return;
+
+    final updatedBoards =
+        current.boards.map((b) {
+          return b.id == id ? b.copyWith(title: title, category: category) : b;
+        }).toList();
+    state = AsyncValue.data(current.copyWith(boards: updatedBoards));
+  }
+
+  void deleteBoard(int id) {
+    final current = state.valueOrNull;
+    if (current == null) return;
+
+    final updatedBoards = current.boards.where((b) => b.id != id).toList();
+
+    state = AsyncValue.data(current.copyWith(boards: updatedBoards));
+  }
+
+  void create(BoardItemEntity board) {
+    final current = state.valueOrNull;
+    if (current == null) return;
+
+    final newBoards = List<BoardItemEntity>.from(current.boards); // ✅ 수정 가능 복사본
+    newBoards.add(board);
+    state = AsyncValue.data(current.copyWith(boards: newBoards));
   }
 }

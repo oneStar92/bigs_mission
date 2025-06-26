@@ -12,7 +12,7 @@ class UpdateViewModel extends _$UpdateViewModel {
     );
   }
 
-  changeTitle(String title) {
+  onChangeTitle(String title) {
     final value = state.valueOrNull;
 
     if (value != null) {
@@ -20,7 +20,7 @@ class UpdateViewModel extends _$UpdateViewModel {
     }
   }
 
-  changeContent(String content) {
+  onChangeContent(String content) {
     final value = state.valueOrNull;
 
     if (value != null) {
@@ -28,7 +28,7 @@ class UpdateViewModel extends _$UpdateViewModel {
     }
   }
 
-  changeCategory(String category) {
+  onChangeCategory(Category? category) {
     final value = state.valueOrNull;
 
     if (value != null) {
@@ -39,18 +39,26 @@ class UpdateViewModel extends _$UpdateViewModel {
   Future<void> updateBoard() async {
     final value = state.valueOrNull;
 
-    if (value != null && !value.isLoading) {
+    if (value != null && !value.isLoading && value.category != null) {
       state = AsyncValue.data(value.copyWith(isLoading: true));
 
-      state = await AsyncValue.guard(() async {
+      try {
         await ref.watch(
           updateBoardProvider
-              .call(board: value.previous, title: value.title, content: value.content, category: value.category)
+              .call(board: value.previous, title: value.title, content: value.content, category: value.category!)
               .future,
         );
-
-        return value.copyWith(isLoading: false);
-      });
+        ref
+            .read(detailViewModelProvider(id: value.previous.id).notifier)
+            .updated(value.title, value.content, value.category!);
+        ref
+            .read(homeViewModelProvider.notifier)
+            .updateBoard(value.previous.id, value.title, value.content, value.category!);
+      } catch (e) {
+        throw UpdateFailedException();
+      } finally {
+        state = AsyncValue.data(value.copyWith(isLoading: false));
+      }
     }
   }
 }

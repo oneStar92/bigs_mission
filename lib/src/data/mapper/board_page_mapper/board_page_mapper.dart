@@ -2,7 +2,7 @@ part of '../mapper.dart';
 
 extension BoardItemEntityMapper on BoardItemDTO {
   BoardItemEntity toEntity() {
-    return BoardItemEntity(id: id, title: title, category: category, createdAt: createdAt);
+    return BoardItemEntity(id: id, title: title, category: Category.fromJson(category), createdAt: createdAt);
   }
 }
 

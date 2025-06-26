@@ -6,7 +6,7 @@ abstract class BoardEntity with _$BoardEntity {
     required int id,
     required String title,
     required String content,
-    required String category,
+    required Category category,
     required String createdAt,
     String? imageUrl,
   }) = _BoardEntity;

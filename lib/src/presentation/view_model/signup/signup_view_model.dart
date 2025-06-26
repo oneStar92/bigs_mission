@@ -71,7 +71,6 @@ class SignupViewModel extends _$SignupViewModel {
     }
   }
 
-  // 회원가입 버튼 누를 때 전체 ON
   validateAll() {
     final value = state.valueOrNull;
 
